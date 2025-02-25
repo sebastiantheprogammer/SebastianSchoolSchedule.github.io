@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sebastian's Schedule</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Playfair Display', serif;
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            font-size: 18px;
+            border-bottom: 2px solid #333;
+            align-items: center;
+        }
+
+        -container {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    white-space: nowrap;
+    display: flex;
+    gap: 5px; /* Adds a small space between date and time */
+}
+
+.clock-container {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    white-space: nowrap;
+    display: flex;
+    gap: 5px; /* Adds space between date and time */
+    z-index: 100; /* Ensures it's always on top */
+}
+
+/* Fix overlap issue on smaller screens */
+@media (max-width: 768px) {
+    .clock-container {
+        font-size: 14px;
+        top: auto;
+        right: auto;
+        position: relative;
+        text-align: center;
+        width: 100%;
+        margin-top: 5px;
+    }
+}
+    
+
+        .current-class-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .current-class-title {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .current-class {
+            font-size: 18px;
+            font-weight: bold;
+            padding: 15px;
+            background: #222;
+            border-radius: 10px;
+            display: inline-block;
+            width: 60%;
+            text-align: center;
+        }
+
+        .day-container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #111;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        th, td {
+            border: 1px solid #333;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        th {
+            background: #222;
+        }
+
+        td {
+            background: #000;
+        }
+
+        tr:hover td {
+            background: #222;
+        }
+
+        .full-schedule {
+            display: none;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .current-class {
+                font-size: 16px;
+                padding: 10px;
+                width: 90%;
+            }
+
+            th, td {
+                padding: 8px;
+                font-size: 12px;
+            
+            }
+        }
+        .greeting-container {
+            text-align: center;
+            font-size: 3px;  /* Adjusted from 24px */
+            font-weight: bold;
+            color: white;
+            margin-top: 5px;  /* Adjusted from 10px */
+            margin-bottom: 5px;  /* Adjusted from 10px */
+            line-height: 1.1;  /* Reduces spacing slightly */
+            max-width: 85%;
+            overflow: hidden;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .greeting-container {
+                font-size: 14px;  /* Adjusted from 16px */
+                max-width: 90%;
+                margin-top: 6px;  /* Moves it up slightly */
+                margin-bottom: 3px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .greeting-container {
+                font-size: 12px;  /* Adjusted from 14px */
+                max-width: 95%;
+                margin-top: 2px;
+                margin-bottom: 2px;
+            }
+        }
+
+
+        @media (max-width: 480px) {
+            .greeting-container {
+                font-size: 14px;
+                max-width: 80%;
+            }
+        }
+
+        .nav-btn {
+            background: #222;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #333;
+        }
+
+        .nav-btn i {
+            font-size: 24px;
+        }
+        #timezone {
+    background: black; /* Keeps it matching your theme */
+    color: white; /* Ensures text stays readable */
+    border: 1px solid white; /* Adds a slight border for visibility */
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+/* Prevents unwanted color changes on focus */
+#timezone:focus {
+    outline: none;
+    border: 1px solid gray;
+}
+
+
+    </style>
+</head>
+<body onload="updateClock(); updateCurrentClass(); updateSchedule();">
+    <div class="datetime-container">
+        <span id="date"></span> • <span id="clock"></span>
+    </div>    
+    <div class="header">
+        <div class="clock-container">
+        
+            <select class="timezone-selector" id="timezone" onchange="updateClock()">
+                <option value="America/New_York" selected>New York (EST)</option>
+                <option value="America/Chicago">Chicago (CST)</option>
+                <option value="America/Los_Angeles">Los Angeles (PST)</option>
+                <option value="Europe/London">London (GMT)</option>
+            </select>
+        </div>
+    </div>
+    <div class="current-class-container">
+        <div class="current-class-title">Current Class</div>
+        <div class="current-class" id="currentClass">Loading...</div>
+    </div>
+
+    <div class="day-container">
+        <h2 id="dayName">Monday</h2>
+        <table>
+            <tr>
+                <th>Time</th>
+                <th>Class</th>
+            </tr>
+            <tbody id="daySchedule"></tbody>
+        </table>
+    </div>
+
+    <script>
+        const schedule = {
+            "Monday": [
+                { time: "07:50 AM", endTime: "08:00 AM", class: "Homeroom", room: "302" },
+                { time: "08:03 AM", endTime: "08:43 AM", class: "Algebra I CC 9 Advanced", room: "303" },
+                { time: "08:45 AM", endTime: "09:25 AM", class: "Intro to Literature", room: "202" },
+                { time: "09:27 AM", endTime: "10:07 AM", class: "Spanish 9 Advanced", room: "201" },
+                { time: "10:09 AM", endTime: "10:55 AM", class: "Advanced Global Studies I", room: "306" },
+                { time: "10:57 AM", endTime: "11:31 AM", class: "Physical Education 9 Advanced", room: "Gym" },
+                { time: "11:33 AM", endTime: "12:13 PM", class: "Lunch (Freshmen & Senior)" },
+                { time: "12:02 PM", endTime: "12:42 PM", class: "Living Environment 9 Advanced", room: "301" },
+                { time: "12:42 PM", endTime: "01:22 PM", class: "Intro to Catholic Faith", room: "306" },
+                { time: "01:24 PM", endTime: "02:04 PM", class: "Intro to Literature", room: "202" },
+                { time: "02:06 PM", endTime: "02:46 PM", class: "Computer Science 9 Advanced", room: "203" }
+            ],
+            "Tuesday": [
+                { time: "07:50 AM", endTime: "08:00 AM", class: "Homeroom", room: "302" },
+                { time: "08:45 AM", endTime: "09:25 AM", class: "Living Environment 9 Advanced", room: "301" },
+                { time: "09:27 AM", endTime: "10:07 AM", class: "Algebra I CC 9 Advanced", room: "303" },
+                { time: "10:09 AM", endTime: "10:55 AM", class: "Intro to Catholic Faith", room: "202" },
+                { time: "10:57 AM", endTime: "11:31 AM", class: "Algebra I CC 9 Advanced", room: "303" },
+                { time: "11:33 AM", endTime: "12:13 PM", class: "Lunch (Freshmen & Senior)" },
+                { time: "12:02 PM", endTime: "12:42 PM", class: "Intro to Literature", room: "202" },
+                { time: "12:42 PM", endTime: "01:22 PM", class: "Advanced Global Studies I", room: "204" },
+                { time: "01:24 PM", endTime: "02:04 PM", class: "Guidance 9 Advanced", room: "202" },
+                { time: "02:06 PM", endTime: "02:46 PM", class: "Spanish 9 Advanced", room: "201" }
+            ],
+            "Wednesday": [
+                { time: "07:50 AM", endTime: "08:00 AM", class: "Homeroom", room: "302" },
+                { time: "08:03 AM", endTime: "08:43 AM", class: "Advanced Global Studies I", room: "204" },
+                { time: "08:45 AM", endTime: "09:25 AM", class: "Computer Science 9 Advanced", room: "203" },
+                { time: "09:27 AM", endTime: "10:07 AM", class: "Spanish 9 Advanced", room: "201" },
+                { time: "10:09 AM", endTime: "10:55 AM", class: "Intro to Literature", room: "204" },
+                { time: "10:57 AM", endTime: "11:31 AM", class: "Algebra I CC 9 Advanced", room: "303" },
+                { time: "11:33 AM", endTime: "12:13 PM", class: "Lunch (Freshmen & Senior)" },
+                { time: "12:02 PM", endTime: "12:42 PM", class: "Living Environment 9 Advanced", room: "301" },
+                { time: "12:42 PM", endTime: "01:22 PM", class: "Intro to Catholic Faith", room: "306" },
+                { time: "01:24 PM", endTime: "02:04 PM", class: "Algebra I CC 9 Advanced", room: "303" },
+                { time: "02:06 PM", endTime: "02:46 PM", class: "Early Dismissal - Professional Development" }
+            ],
+            "Thursday": [
+                { time: "07:50 AM", endTime: "08:00 AM", class: "Homeroom", room: "302" },
+                { time: "08:03 AM", endTime: "08:43 AM", class: "Mass" },
+                { time: "08:45 AM", endTime: "09:25 AM", class: "Spanish 9 Advanced", room: "201" },
+                { time: "09:27 AM", endTime: "10:07 AM", class: "Intro to Literature", room: "202" },
+                { time: "10:09 AM", endTime: "10:55 AM", class: "Advanced Global Studies I", room: "306" },
+                { time: "10:57 AM", endTime: "11:31 AM", class: "Physical Education 9 Advanced", room: "Gym" },
+                { time: "11:33 AM", endTime: "12:13 PM", class: "Lunch (Freshmen & Senior)" },
+                { time: "12:02 PM", endTime: "12:42 PM", class: "Physical Education 9 Advanced", room: "Gym" },
+                { time: "12:42 PM", endTime: "01:22 PM", class: "Living Environment 9 Advanced", room: "301" },
+                { time: "01:24 PM", endTime: "02:04 PM", class: "Living Environment 9 Advanced", room: "301" },
+                { time: "02:06 PM", endTime: "02:46 PM", class: "Holy Hour" }
+            ],
+            "Friday": [
+                { time: "07:50 AM", endTime: "08:00 AM", class: "Homeroom", room: "302" },
+                { time: "08:03 AM", endTime: "08:43 AM", class: "Intro to Literature", room: "202" },
+                { time: "08:45 AM", endTime: "09:25 AM", class: "Spanish 9 Advanced", room: "201" },
+                { time: "09:27 AM", endTime: "10:07 AM", class: "Intro to Catholic Faith", room: "306" },
+                { time: "10:09 AM", endTime: "10:55 AM", class: "Physical Education 9 Advanced", room: "Gym" },
+                { time: "10:57 AM", endTime: "11:31 AM", class: "Mass" },
+                { time: "11:33 AM", endTime: "12:13 PM", class: "Lunch (Freshmen & Senior)" },
+                { time: "12:02 PM", endTime: "12:42 PM", class: "Algebra I CC 9 Advanced", room: "303" },
+                { time: "12:42 PM", endTime: "01:22 PM", class: "Advanced Global Studies I", room: "204" },
+                { time: "01:24 PM", endTime: "02:04 PM", class: "Algebra I CC 9 Advanced", room: "303" },
+                { time: "02:06 PM", endTime: "02:46 PM", class: "Living Environment 9 Advanced", room: "301" }
+            ]
+        };
+        let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+        let todayIndex = new Date().getDay() - 1;
+
+        if (todayIndex < 0 || todayIndex > 4) {
+            todayIndex = 0;
+        }
+
+        let currentDayIndex = todayIndex;
+        let greetingTimeout;
+
+        function updateClock() {
+    let timezone = document.getElementById("timezone").value;
+    let now = new Date();
+
+    // Format time (12-hour AM/PM)
+    let time = now.toLocaleTimeString("en-US", { 
+        hour12: true, 
+        timeZone: timezone 
+    });
+
+    // Format date (Tuesday, February 25, 2025)
+    let date = now.toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        timeZone: timezone
+    });
+
+    // Update the clock and date without moving it
+    document.getElementById("clock").innerText = time;
+    document.getElementById("date").innerText = date;
+}
+
+// Ensure both date & time update every second
+setInterval(updateClock, 1000);
+
+
+// Ensure the clock updates every second
+setInterval(updateClock, 1000);
+
+        function updateGreeting(timezone) {
+            clearTimeout(greetingTimeout);
+            let now = new Date();
+            let hours = now.toLocaleString("en-US", { hour: 'numeric', hour12: false, timeZone: timezone });
+            let greeting = "Good Evening, Sebastian";
+            let emoji = "🌙";
+
+            if (hours >= 5 && hours < 12) {
+                greeting = "Good Morning, Sebastian";
+                emoji = "🌞";
+            } else if (hours >= 12 && hours < 17) {
+                greeting = "Good Afternoon, Sebastian";
+                emoji = "☀️";
+            } else if (hours >= 17 && hours < 20) {
+                greeting = "Good Evening, Sebastian";
+                emoji = "🌆";
+            }
+
+            let greetingElement = document.getElementById("greeting");
+            greetingElement.innerHTML = `${greeting} ${emoji}`;
+
+            // If greeting doesn't load within 5 seconds, change it
+            greetingTimeout = setTimeout(() => {
+                greetingElement.innerHTML = "Welcome Back, Sebastian 🫡";
+            }, 5000);
+        }
+
+        function updateCurrentClass() {
+            let currentClassElement = document.getElementById("currentClass");
+            let currentClassTitle = document.querySelector(".current-class-title");
+
+            let today = days[currentDayIndex];
+            let now = new Date();
+            let currentTime = now.getHours() * 60 + now.getMinutes();
+
+            let currentClass = "School Finished";
+            let scheduleToday = schedule[today];
+
+            for (let i = 0; i < scheduleToday.length; i++) {
+                let classTime = scheduleToday[i].time.split(" ");
+                let endClassTime = scheduleToday[i].endTime.split(" ");
+                let timeParts = classTime[0].split(":");
+                let endTimeParts = endClassTime[0].split(":");
+
+                let classHour = parseInt(timeParts[0]);
+                let classMinute = parseInt(timeParts[1]);
+                let endHour = parseInt(endTimeParts[0]);
+                let endMinute = parseInt(endTimeParts[1]);
+
+                if (classTime[1] === "PM" && classHour !== 12) classHour += 12;
+                if (endClassTime[1] === "PM" && endHour !== 12) endHour += 12;
+                if (classTime[1] === "AM" && classHour === 12) classHour = 0;
+                if (endClassTime[1] === "AM" && endHour === 12) endHour = 0;
+
+                let classStart = classHour * 60 + classMinute;
+                let classEnd = endHour * 60 + endMinute;
+
+                if (currentTime >= classStart && currentTime < classEnd) {
+                    currentClass = `${scheduleToday[i].class} (${scheduleToday[i].time} - ${scheduleToday[i].endTime})`;
+                    break;
+                }
+            }
+
+            if (new Date().getDay() === 6 || new Date().getDay() === 0 || currentClass === "School Finished") {
+                currentClassElement.innerText = "School Finished";
+                currentDayIndex = (currentDayIndex + 1) % days.length;
+                updateSchedule();
+                currentClassTitle.style.display = "none";
+            } else {
+                currentClassElement.innerText = currentClass;
+                currentClassTitle.style.display = "block";
+            }
+        }
+
+        function updateSchedule() {
+            let today = new Date().getDay();
+            let displayDay = today === 6 || today === 0 ? "Weekend" : days[currentDayIndex];
+
+            document.getElementById("dayName").innerText = displayDay;
+            let scheduleTable = document.getElementById("daySchedule");
+
+            if (today === 6 || today === 0) {
+                scheduleTable.innerHTML = `<tr><td colspan="2">Weekend - No School</td></tr>`;
+            } else {
+                scheduleTable.innerHTML = schedule[days[currentDayIndex]]
+                    .map(period => `<tr><td>${period.time} - ${period.endTime}</td><td>${period.class}</td></tr>`)
+                    .join('');
+            }
+        }
+
+        // Swipe and Arrow Key Detection
+        let startX = 0, startY = 0;
+        document.body.addEventListener("touchstart", e => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        });
+
+        document.body.addEventListener("touchend", e => {
+            let endX = e.changedTouches[0].clientX;
+            let endY = e.changedTouches[0].clientY;
+
+            if (Math.abs(startX - endX) > 50 && Math.abs(startY - endY) < 50) {
+                if (startX - endX > 50) {
+                    nextDay();
+                } else {
+                    prevDay();
+                }
+            }
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowLeft") prevDay();
+            if (e.key === "ArrowRight") nextDay();
+        });
+
+        document.getElementById("prevDay").addEventListener("click", prevDay);
+        document.getElementById("nextDay").addEventListener("click", nextDay);
+
+        function prevDay() {
+            currentDayIndex = (currentDayIndex - 1 + days.length) % days.length;
+            updateSchedule();
+            updateCurrentClass();
+        }
+
+        function nextDay() {
+            currentDayIndex = (currentDayIndex + 1) % days.length;
+            updateSchedule();
+            updateCurrentClass();
+        }
+
+        setInterval(updateClock, 1000);
+        setInterval(updateCurrentClass, 60000);
+        updateSchedule();
+    </script>
+    
+</body>
+</html>
+
