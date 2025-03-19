@@ -261,8 +261,8 @@
                 { time: "08:45 AM", endTime: "09:25 AM", class: "Intro to Literature", room: "202" },
                 { time: "09:27 AM", endTime: "10:07 AM", class: "Spanish 9 Advanced", room: "201" },
                 { time: "10:09 AM", endTime: "10:55 AM", class: "Advanced Global Studies I", room: "306" },
-                { time: "10:57 AM", endTime: "11:31 AM", class: "Physical Education 9 Advanced", room: "Gym" },
-                { time: "11:33 AM", endTime: "12:13 PM", class: "Lunch (Freshmen & Senior)" },
+                { time: "10:57 AM", endTime: "11:31 AM", class: "Mass", room: "Gym" },
+                { time: "11:33 AM", endTime: "12:00 PM", class: "Lunch (Freshmen & Senior)" },
                 { time: "12:02 PM", endTime: "12:42 PM", class: "Living Environment 9 Advanced", room: "301" },
                 { time: "12:42 PM", endTime: "01:22 PM", class: "Intro to Catholic Faith", room: "306" },
                 { time: "01:24 PM", endTime: "02:04 PM", class: "Intro to Literature", room: "202" },
@@ -286,7 +286,7 @@
                 { time: "08:45 AM", endTime: "09:25 AM", class: "Computer Science 9 Advanced", room: "203" },
                 { time: "09:27 AM", endTime: "10:07 AM", class: "Spanish 9 Advanced", room: "201" },
                 { time: "10:09 AM", endTime: "10:55 AM", class: "Intro to Literature", room: "204" },
-                { time: "10:57 AM", endTime: "11:31 AM", class: "Algebra I CC 9 Advanced", room: "303" },
+                { time: "10:57 AM", endTime: "11:31 AM", class: "Mass", room: "303" },
                 { time: "11:33 AM", endTime: "12:13 PM", class: "Lunch (Freshmen & Senior)" },
                 { time: "12:02 PM", endTime: "12:42 PM", class: "Living Environment 9 Advanced", room: "301" },
                 { time: "12:42 PM", endTime: "01:22 PM", class: "Intro to Catholic Faith", room: "306" },
@@ -299,7 +299,7 @@
                 { time: "08:45 AM", endTime: "09:25 AM", class: "Spanish 9 Advanced", room: "201" },
                 { time: "09:27 AM", endTime: "10:07 AM", class: "Intro to Literature", room: "202" },
                 { time: "10:09 AM", endTime: "10:55 AM", class: "Advanced Global Studies I", room: "306" },
-                { time: "10:57 AM", endTime: "11:31 AM", class: "Physical Education 9 Advanced", room: "Gym" },
+                { time: "10:57 AM", endTime: "11:31 AM", class: "Algebra I CC 9 Advanced", room: "Gym" },
                 { time: "11:33 AM", endTime: "12:13 PM", class: "Lunch (Freshmen & Senior)" },
                 { time: "12:02 PM", endTime: "12:42 PM", class: "Physical Education 9 Advanced", room: "Gym" },
                 { time: "12:42 PM", endTime: "01:22 PM", class: "Living Environment 9 Advanced", room: "301" },
@@ -389,51 +389,62 @@ setInterval(updateClock, 1000);
         }
 
         function updateCurrentClass() {
-            let currentClassElement = document.getElementById("currentClass");
-            let currentClassTitle = document.querySelector(".current-class-title");
+    let currentClassElement = document.getElementById("currentClass");
+    let currentClassTitle = document.querySelector(".current-class-title");
 
-            let today = days[currentDayIndex];
-            let now = new Date();
-            let currentTime = now.getHours() * 60 + now.getMinutes();
+    let today = days[currentDayIndex];
+    let now = new Date();
+    let currentTime = now.getHours() * 60 + now.getMinutes(); // Convert to total minutes
 
-            let currentClass = "School Finished";
-            let scheduleToday = schedule[today];
+    let currentClass = "School Finished";
+    let scheduleToday = schedule[today];
 
-            for (let i = 0; i < scheduleToday.length; i++) {
-                let classTime = scheduleToday[i].time.split(" ");
-                let endClassTime = scheduleToday[i].endTime.split(" ");
-                let timeParts = classTime[0].split(":");
-                let endTimeParts = endClassTime[0].split(":");
+    for (let i = 0; i < scheduleToday.length; i++) {
+        let classTime = scheduleToday[i].time.split(" ");
+        let endClassTime = scheduleToday[i].endTime.split(" ");
+        let timeParts = classTime[0].split(":");
+        let endTimeParts = endClassTime[0].split(":");
 
-                let classHour = parseInt(timeParts[0]);
-                let classMinute = parseInt(timeParts[1]);
-                let endHour = parseInt(endTimeParts[0]);
-                let endMinute = parseInt(endTimeParts[1]);
+        let classHour = parseInt(timeParts[0]);
+        let classMinute = parseInt(timeParts[1]);
+        let endHour = parseInt(endTimeParts[0]);
+        let endMinute = parseInt(endTimeParts[1]);
 
-                if (classTime[1] === "PM" && classHour !== 12) classHour += 12;
-                if (endClassTime[1] === "PM" && endHour !== 12) endHour += 12;
-                if (classTime[1] === "AM" && classHour === 12) classHour = 0;
-                if (endClassTime[1] === "AM" && endHour === 12) endHour = 0;
+        if (classTime[1] === "PM" && classHour !== 12) classHour += 12;
+        if (endClassTime[1] === "PM" && endHour !== 12) endHour += 12;
+        if (classTime[1] === "AM" && classHour === 12) classHour = 0;
+        if (endClassTime[1] === "AM" && endHour === 12) endHour = 0;
 
-                let classStart = classHour * 60 + classMinute;
-                let classEnd = endHour * 60 + endMinute;
+        let classStart = classHour * 60 + classMinute;
+        let classEnd = endHour * 60 + endMinute;
 
-                if (currentTime >= classStart && currentTime < classEnd) {
-                    currentClass = `${scheduleToday[i].class} (${scheduleToday[i].time} - ${scheduleToday[i].endTime})`;
-                    break;
-                }
-            }
+        // If it's within a class period
+        if (currentTime >= classStart && currentTime < classEnd) {
+            currentClass = `${scheduleToday[i].class} (${scheduleToday[i].time} - ${scheduleToday[i].endTime})`;
+            break;
+        }
 
-            if (new Date().getDay() === 6 || new Date().getDay() === 0 || currentClass === "School Finished") {
-                currentClassElement.innerText = "School Finished";
-                currentDayIndex = (currentDayIndex + 1) % days.length;
-                updateSchedule();
-                currentClassTitle.style.display = "none";
-            } else {
-                currentClassElement.innerText = currentClass;
-                currentClassTitle.style.display = "block";
+        // If it's between classes, show "Switch Classes" message
+        if (i < scheduleToday.length - 1) {
+            let nextClassStart = parseInt(scheduleToday[i + 1].time.split(":")[0]) * 60 + parseInt(scheduleToday[i + 1].time.split(":")[1]);
+            if (currentTime >= classEnd && currentTime < nextClassStart) {
+                currentClass = `Switch Classes: ${scheduleToday[i + 1].class}`;
+                break;
             }
         }
+    }
+
+    // If it's the weekend or after school hours
+    if (new Date().getDay() === 6 || new Date().getDay() === 0 || currentClass === "School Finished") {
+        currentClassElement.innerText = "School Finished";
+        currentDayIndex = (currentDayIndex + 1) % days.length;
+        updateSchedule();
+        currentClassTitle.style.display = "none"; // Hide "Current Class" title
+    } else {
+        currentClassElement.innerText = currentClass;
+        currentClassTitle.style.display = "block"; // Show "Current Class" title
+    }
+}
 
         function updateSchedule() {
             let today = new Date().getDay();
@@ -494,8 +505,171 @@ setInterval(updateClock, 1000);
         setInterval(updateClock, 1000);
         setInterval(updateCurrentClass, 60000);
         updateSchedule();
+        document.addEventListener("keydown", (e) => {
+    // Left/Right Navigation (Days)
+    if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") prevDay();
+    if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") nextDay();
+
+    // Up/Down Navigation (Schedule)
+    if (e.key === "ArrowUp" || e.key.toLowerCase() === "w") moveUpSchedule();
+    if (e.key === "ArrowDown" || e.key.toLowerCase() === "s") moveDownSchedule();
+});
+
+// Function to move up the schedule (previous class)
+function moveUpSchedule() {
+    let today = days[currentDayIndex];
+    let scheduleToday = schedule[today];
+
+    if (selectedClassIndex > 0) {
+        selectedClassIndex--; // Move up
+    } else {
+        selectedClassIndex = scheduleToday.length - 1; // Wrap to last class
+    }
+    highlightSelectedClass();
+}
+
+// Function to move down the schedule (next class)
+function moveDownSchedule() {
+    let today = days[currentDayIndex];
+    let scheduleToday = schedule[today];
+
+    if (selectedClassIndex < scheduleToday.length - 1) {
+        selectedClassIndex++; // Move down
+    } else {
+        selectedClassIndex = 0; // Wrap to first class
+    }
+    highlightSelectedClass();
+}
+
+// Function to highlight the selected class
+let selectedClassIndex = 0;
+
+function highlightSelectedClass() {
+    let rows = document.querySelectorAll("#daySchedule tr");
+    rows.forEach((row, index) => {
+        if (index === selectedClassIndex) {
+            row.style.backgroundColor = "#444"; // Highlight the selected row
+            row.style.color = "white"; // Ensure text is readable
+        } else {
+            row.style.backgroundColor = "transparent"; // Remove highlight from others
+            row.style.color = "inherit"; // Restore default text color
+        }
+    });
+}
+
+// Ensure first class is highlighted on load
+highlightSelectedClass();
+d
     </script>
     
 </body>
 </html>
+<!--
 
+                         /[-])//  ___
+                    __ --\ `_/~--|  / \ 
+                  /_-/~~--~~ /~~~\\_\ /\
+                  |  |___|===|_-- | \ \ \
+_/~~~~~~~~|~~\,   ---|---\___/----|  \/\-\
+~\________|__/   / // \__ |  ||  / | |   | |
+         ,~-|~~~~~\--, | \|--|/~|||  |   | | 
+         [3-|____---~~ _--'==;/ _,   |   |_|
+                     /   /\__|_/  \  \__/--/ 
+                    /---/_\  -___/ |  /,--| 
+                    /  /\/~--|   | |  \///
+                   /  / |-__ \    |/
+                  |--/ /      |-- | \  
+                 \^~~\\/\      \   \/- _
+                  \    |  \     |~~\~~| \ 
+                   \    \  \     \   \  | \
+                     \    \ |     \   \    \
+                      |~~|\/\|     \   \   |
+                     |   |/         \_--_- |\
+                     |  /            /   |/\/
+                      ~~             /  /   
+                                    |__/    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   , ,, ,                              
+   | || |    ,/  _____  \.             
+   \_||_/    ||_/     \_||             
+     ||       \_| . . |_/              
+     ||         |  L  |                
+    ,||         |`==='|                
+    |>|      ___`>  -<'___             
+    |>|\    /             \            
+    \>| \  /  ,    .    .  |           
+     ||  \/  /| .  |  . |  |           
+     ||\  ` / | ___|___ |  |     (     
+  (( || `--'  | _______ |  |     ))  ( 
+(  )\|| (  )\ | - --- - | -| (  ( \  ))
+(\/  || ))/ ( | -- - -- |  | )) )  \(( 
+ ( ()||((( ())|         |  |( (( () )hjm
+
+⠀ ________  _______  _______       __        ________  ___________  __          __      _____  ___      
+  /"       )/"     "||   _  "\     /""\      /"       )("     _   ")|" \        /""\    (\"   \|"  \     
+ (:   \___/(: ______)(. |_)  :)   /    \    (:   \___/  )__/  \\__/ ||  |      /    \   |.\\   \    |    
+  \___  \   \/    |  |:     \/   /' /\  \    \___  \       \\_ /    |:  |     /' /\  \  |: \.   \\  |    
+   __/  \\  // ___)_ (|  _  \\  //  __'  \    __/  \\      |.  |    |.  |    //  __'  \ |.  \    \. |    
+  /" \   :)(:      "||: |_)  :)/   /  \\  \  /" \   :)     \:  |    /\  |\  /   /  \\  \|    \    \ |    
+ (_______/  \_______)(_______/(___/    \___)(_______/       \__|   (__\_|_)(___/    \___)\___|\____\)    
+
+                          ___      ___       __       ________    _______                                
+                         |"  \    /"  |     /""\     |"      "\  /"     "|                               
+                          \   \  //   |    /    \    (.  ___  :)(: ______)                               
+                          /\\  \/.    |   /' /\  \   |: \   ) || \/    |                                 
+                         |: \.        |  //  __'  \  (| (___\ || // ___)_                                
+                         |.  \    /:  | /   /  \\  \ |:       :)(:      "|                               
+                         |___|\__/|___|(___/    \___)(________/  \_______)                               
+
+          ___________  __    __   __      ________       ________  __    __   __  ___________            
+         ("     _   ")/" |  | "\ |" \    /"       )     /"       )/" |  | "\ |" \("     _   ")           
+          )__/  \\__/(:  (__)  :)||  |  (:   \___/     (:   \___/(:  (__)  :)||  |)__/  \\__/            
+             \\_ /    \/      \/ |:  |   \___  \        \___  \   \/      \/ |:  |   \\_ /               
+             |.  |    //  __  \\ |.  |    __/  \\        __/  \\  //  __  \\ |.  |   |.  |               
+             \:  |   (:  (  )  :)/\  |\  /" \   :)      /" \   :)(:  (  )  :)/\  |\  \:  |               
+              \__|    \__|  |__/(__\_|_)(_______/      (_______/  \__|  |__/(__\_|_)  \__|               
+
+
+-->
