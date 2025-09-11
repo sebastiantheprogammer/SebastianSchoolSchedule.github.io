@@ -184,7 +184,6 @@ export const MobileNavMenu = ({
   children,
   className,
   isOpen,
-  onClose,
 }: MobileNavMenuProps) => {
   return (
     <AnimatePresence>
@@ -257,8 +256,8 @@ export const NavbarLogo = () => {
       href="#"
       className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-white"
     >
-      <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-        <span className="text-white font-bold text-sm">SS</span>
+      <div className="w-8 h-8 bg-white border border-black rounded-lg flex items-center justify-center">
+        <span className="text-black font-bold text-sm">SS</span>
       </div>
       <span className="font-medium text-white">ScheduleSnap</span>
     </a>

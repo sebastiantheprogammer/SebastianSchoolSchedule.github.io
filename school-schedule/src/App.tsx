@@ -1,17 +1,15 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { 
-  BackgroundGrid, 
-  HeroHighlight, 
-  Highlight,
-  TextRevealCard 
+  HeroHighlight
 } from "@/components/ui/aceternity-ui"
 import { BackgroundBeams } from "@/components/ui/background-beams"
 import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect"
+import { OnboardingFlow } from "@/components/OnboardingFlow"
 import {
   Navbar,
   NavBody,
@@ -25,20 +23,38 @@ import {
 } from "@/components/ui/resizable-navbar"
 
 function App() {
-  const [isUploading, setIsUploading] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [showOnboarding, setShowOnboarding] = useState(false)
 
-  const handleUpload = () => {
-    setIsUploading(true)
-    // Simulate upload process
-    setTimeout(() => setIsUploading(false), 2000)
+  const handleGetStarted = () => {
+    setShowOnboarding(true)
+  }
+
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false)
+    // Here you would typically redirect to the actual app or dashboard
+    alert("Welcome to ScheduleSnap! You're now logged in.")
+  }
+
+  const handleOnboardingBack = () => {
+    setShowOnboarding(false)
   }
 
   const navItems = [
     { name: "Features", link: "#features" },
     { name: "How It Works", link: "#how-it-works" },
-    { name: "Demo", link: "#demo" },
+    { name: "Demo", link: "https://github.com/sebastiantheprogammer/schoolscheduleapp" },
   ]
+
+  // Show onboarding flow if active
+  if (showOnboarding) {
+    return (
+      <OnboardingFlow 
+        onComplete={handleOnboardingComplete}
+        onBack={handleOnboardingBack}
+      />
+    )
+  }
 
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
@@ -51,8 +67,8 @@ function App() {
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
-            <NavbarButton variant="secondary">Login</NavbarButton>
-            <NavbarButton variant="primary">Get Started</NavbarButton>
+            <NavbarButton variant="secondary" onClick={handleGetStarted}>Login</NavbarButton>
+            <NavbarButton variant="primary" onClick={handleGetStarted}>Get Started</NavbarButton>
           </div>
         </NavBody>
 
@@ -82,14 +98,20 @@ function App() {
             ))}
             <div className="flex w-full flex-col gap-4">
               <NavbarButton
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => {
+                  setIsMobileMenuOpen(false)
+                  handleGetStarted()
+                }}
                 variant="secondary"
                 className="w-full"
               >
                 Login
               </NavbarButton>
               <NavbarButton
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => {
+                  setIsMobileMenuOpen(false)
+                  handleGetStarted()
+                }}
                 variant="primary"
                 className="w-full"
               >
@@ -101,7 +123,7 @@ function App() {
       </Navbar>
 
       {/* Hero Section */}
-      <HeroHighlight className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+      <HeroHighlight className="pt-20 pb-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -114,24 +136,26 @@ function App() {
           </motion.div>
           
           <motion.div
-            className="mb-6"
+            className="mb-6 px-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <TypewriterEffectSmooth words={[
-              { text: "Turn", className: "text-white" },
-              { text: "Your", className: "text-white" },
-              { text: "Schedule", className: "text-white" },
-              { text: "Into", className: "text-white" },
-              { text: "a", className: "text-white" },
-              { text: "Beautiful", className: "text-white" },
-              { text: "App", className: "text-white" }
-            ]} />
+            <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold">
+              <TypewriterEffectSmooth words={[
+                { text: "Turn", className: "text-white" },
+                { text: "Your", className: "text-white" },
+                { text: "Schedule", className: "text-white" },
+                { text: "Into", className: "text-white" },
+                { text: "a", className: "text-white" },
+                { text: "Beautiful", className: "text-white" },
+                { text: "App", className: "text-white" }
+              ]} />
+            </div>
           </motion.div>
           
           <motion.p 
-            className="text-xl text-white/70 max-w-3xl mx-auto mb-8 leading-relaxed"
+            className="text-lg sm:text-xl text-white/70 max-w-3xl mx-auto mb-8 leading-relaxed px-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -142,7 +166,7 @@ function App() {
           </motion.p>
 
           <motion.div 
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 px-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
@@ -150,55 +174,60 @@ function App() {
             <Button 
               size="lg" 
               className="w-full sm:w-auto bg-white text-black hover:bg-white/90" 
-              onClick={handleUpload}
+              onClick={handleGetStarted}
             >
-              {isUploading ? "Creating Your App..." : "Upload Schedule Photo"}
+              Get Started
             </Button>
-            <Button variant="outline" size="lg" className="w-full sm:w-auto border-white text-white bg-transparent hover:bg-white hover:text-black">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="w-full sm:w-auto border-white text-white bg-transparent hover:bg-white hover:text-black"
+              onClick={() => window.open('https://github.com/sebastiantheprogammer/schoolscheduleapp', '_blank')}
+            >
               View Demo
             </Button>
           </motion.div>
 
           {/* Stats */}
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto px-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
             <div className="text-center">
-              <div className="text-3xl font-bold text-white">500+</div>
-              <div className="text-white/60">NYC Students Helped</div>
+              <div className="text-2xl sm:text-3xl font-bold text-white">500+</div>
+              <div className="text-white/60 text-sm sm:text-base">NYC Students Helped</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-white">30s</div>
-              <div className="text-white/60">Average Setup Time</div>
+              <div className="text-2xl sm:text-3xl font-bold text-white">30s</div>
+              <div className="text-white/60 text-sm sm:text-base">Average Setup Time</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-white">100%</div>
-              <div className="text-white/60">Chromebook Compatible</div>
+              <div className="text-2xl sm:text-3xl font-bold text-white">100%</div>
+              <div className="text-white/60 text-sm sm:text-base">Chromebook Compatible</div>
             </div>
           </motion.div>
         </div>
       </HeroHighlight>
 
       {/* Features Section */}
-      <section id="features" className="py-16 px-4 sm:px-6 lg:px-8 relative">
+      <section id="features" className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 relative">
         <div className="max-w-7xl mx-auto">
           <motion.div 
-            className="text-center mb-16"
+            className="text-center mb-12 sm:mb-16"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold mb-4 text-white">Perfect for NYC Students</h2>
-            <p className="text-xl text-white/70 max-w-2xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white px-4">Perfect for NYC Students</h2>
+            <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto px-4">
               Designed specifically for the challenges NYC students face with the new phone policies
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {[
               {
                 icon: "📱",
@@ -238,34 +267,17 @@ function App() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <TextRevealCard
-                  text={
-                    <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300">
-                      <CardHeader>
-                        <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mb-4">
-                          <span className="text-2xl">{feature.icon}</span>
-                        </div>
-                        <CardTitle className="text-white">{feature.title}</CardTitle>
-                        <CardDescription className="text-white/70">
-                          {feature.description}
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
-                  }
-                  revealText={
-                    <Card className="bg-white/10 border-white/20">
-                      <CardHeader>
-                        <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-4">
-                          <span className="text-2xl">{feature.icon}</span>
-                        </div>
-                        <CardTitle className="text-white">{feature.title}</CardTitle>
-                        <CardDescription className="text-white/80">
-                          {feature.description}
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
-                  }
-                />
+                <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300">
+                  <CardHeader>
+                    <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mb-4">
+                      <span className="text-2xl">{feature.icon}</span>
+                    </div>
+                    <CardTitle className="text-white">{feature.title}</CardTitle>
+                    <CardDescription className="text-white/70">
+                      {feature.description}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
               </motion.div>
             ))}
           </div>
@@ -273,22 +285,22 @@ function App() {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="py-16 px-4 sm:px-6 lg:px-8 relative">
+      <section id="how-it-works" className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 relative">
         <div className="max-w-7xl mx-auto">
           <motion.div 
-            className="text-center mb-16"
+            className="text-center mb-12 sm:mb-16"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold mb-4 text-white">How It Works</h2>
-            <p className="text-xl text-white/70">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white px-4">How It Works</h2>
+            <p className="text-lg sm:text-xl text-white/70 px-4">
               Three simple steps to get your schedule app
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             {[
               {
                 step: "1",
@@ -328,7 +340,7 @@ function App() {
       </section>
 
       {/* CTA Section */}
-      <section id="get-started" className="py-16 px-4 sm:px-6 lg:px-8 bg-white/5 relative">
+      <section id="get-started" className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-white/5 relative">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -336,18 +348,23 @@ function App() {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold mb-4 text-white">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white px-4">
               Ready to Never Miss a Class Again?
             </h2>
-            <p className="text-xl mb-8 text-white/70">
+            <p className="text-lg sm:text-xl mb-8 text-white/70 px-4">
               Join hundreds of NYC students who've already made the switch to ScheduleSnap
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-white text-black hover:bg-white/90">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
+              <Button size="lg" className="bg-white text-black hover:bg-white/90" onClick={handleGetStarted}>
                 Create Your Schedule App
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white bg-transparent hover:bg-white hover:text-blue-600">
-                Learn More
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-white bg-transparent hover:bg-white hover:text-blue-600"
+                onClick={() => window.open('https://github.com/sebastiantheprogammer/schoolscheduleapp', '_blank')}
+              >
+                View on GitHub
               </Button>
             </div>
           </motion.div>
@@ -355,9 +372,9 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-4 sm:px-6 lg:px-8 border-t border-white/10">
+      <footer className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 border-t border-white/10">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
       <div>
               <div className="flex items-center space-x-2 mb-4">
                 <div className="w-8 h-8 bg-white/10 border border-white/20 rounded-lg flex items-center justify-center">
@@ -373,27 +390,27 @@ function App() {
             <div>
               <h3 className="font-semibold mb-4 text-white">Product</h3>
               <ul className="space-y-2 text-white/60">
-                <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Demo</a></li>
+                <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
+                <li><a href="#how-it-works" className="hover:text-white transition-colors">How It Works</a></li>
+                <li><a href="https://github.com/sebastiantheprogammer/schoolscheduleapp" target="_blank" className="hover:text-white transition-colors">Demo</a></li>
               </ul>
             </div>
             
             <div>
               <h3 className="font-semibold mb-4 text-white">Support</h3>
               <ul className="space-y-2 text-white/60">
-                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">FAQ</a></li>
+                <li><a href="https://github.com/sebastiantheprogammer/schoolscheduleapp/issues" target="_blank" className="hover:text-white transition-colors">Help Center</a></li>
+                <li><a href="mailto:support@schedulesnap.com" className="hover:text-white transition-colors">Contact</a></li>
+                <li><a href="https://github.com/sebastiantheprogammer/schoolscheduleapp/discussions" target="_blank" className="hover:text-white transition-colors">FAQ</a></li>
               </ul>
             </div>
             
             <div>
               <h3 className="font-semibold mb-4 text-white">Legal</h3>
               <ul className="space-y-2 text-white/60">
-                <li><a href="#" className="hover:text-white transition-colors">Privacy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Open Source</a></li>
+                <li><a href="https://github.com/sebastiantheprogammer/schoolscheduleapp/blob/main/PRIVACY.md" target="_blank" className="hover:text-white transition-colors">Privacy</a></li>
+                <li><a href="https://github.com/sebastiantheprogammer/schoolscheduleapp/blob/main/TERMS.md" target="_blank" className="hover:text-white transition-colors">Terms</a></li>
+                <li><a href="https://github.com/sebastiantheprogammer/schoolscheduleapp" target="_blank" className="hover:text-white transition-colors">Open Source</a></li>
               </ul>
             </div>
           </div>
