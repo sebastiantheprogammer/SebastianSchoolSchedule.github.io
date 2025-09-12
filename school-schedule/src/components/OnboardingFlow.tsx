@@ -5,6 +5,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { BackgroundBeams } from "@/components/ui/background-beams"
 import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect"
 import { LoginPage } from './LoginPage'
+import ScheduleDemo from './ScheduleDemo'
 
 interface OnboardingFlowProps {
   onComplete: () => void
@@ -14,6 +15,7 @@ interface OnboardingFlowProps {
 export function OnboardingFlow({ onComplete, onBack }: OnboardingFlowProps) {
   const [currentStep, setCurrentStep] = useState(0)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [showDemo, setShowDemo] = useState(false)
 
   const steps = [
     {
@@ -88,6 +90,29 @@ export function OnboardingFlow({ onComplete, onBack }: OnboardingFlowProps) {
           ))}
         </div>
       )
+    },
+    {
+      title: "See It In Action",
+      description: "Preview how your schedule will look with real-time updates.",
+      content: (
+        <div className="text-center space-y-6">
+          <div className="w-24 h-24 bg-white/10 border border-white/20 rounded-lg flex items-center justify-center mx-auto">
+            <span className="text-4xl">📅</span>
+          </div>
+          <p className="text-white/70 text-lg">
+            Experience a live demo of your personalized schedule with current time tracking and class highlighting.
+          </p>
+          <div className="bg-white/5 border border-white/10 rounded-lg p-4">
+            <h4 className="text-white font-semibold mb-2">Demo Features:</h4>
+            <ul className="text-white/70 text-sm space-y-1">
+              <li>• Real-time clock and current class highlighting</li>
+              <li>• Full schedule with teacher and room information</li>
+              <li>• Next class notifications</li>
+              <li>• Mobile-responsive design</li>
+            </ul>
+          </div>
+        </div>
+      )
     }
   ]
 
@@ -95,9 +120,13 @@ export function OnboardingFlow({ onComplete, onBack }: OnboardingFlowProps) {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1)
     } else {
-      // Move to login
-      setCurrentStep(-1) // -1 indicates login step
+      // Show demo
+      setShowDemo(true)
     }
+  }
+
+  const handleViewDemo = () => {
+    setShowDemo(true)
   }
 
   const handlePrev = () => {
@@ -114,6 +143,19 @@ export function OnboardingFlow({ onComplete, onBack }: OnboardingFlowProps) {
     setTimeout(() => {
       onComplete()
     }, 1000)
+  }
+
+  const handleDemoBack = () => {
+    setShowDemo(false)
+  }
+
+  const handleDemoComplete = () => {
+    setShowDemo(false)
+    setCurrentStep(-1) // Move to login
+  }
+
+  if (showDemo) {
+    return <ScheduleDemo onBack={handleDemoBack} onComplete={handleDemoComplete} />
   }
 
   if (currentStep === -1) {
@@ -199,10 +241,10 @@ export function OnboardingFlow({ onComplete, onBack }: OnboardingFlowProps) {
               </Button>
               
               <Button
-                onClick={handleNext}
+                onClick={currentStep === steps.length - 1 ? handleViewDemo : handleNext}
                 className="bg-white text-black hover:bg-white/90"
               >
-                {currentStep === steps.length - 1 ? 'Get Started' : 'Next'}
+                {currentStep === steps.length - 1 ? 'View Demo' : 'Next'}
               </Button>
             </div>
           </Card>

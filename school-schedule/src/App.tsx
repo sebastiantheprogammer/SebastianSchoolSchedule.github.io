@@ -10,6 +10,7 @@ import {
 import { BackgroundBeams } from "@/components/ui/background-beams"
 import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect"
 import { OnboardingFlow } from "@/components/OnboardingFlow"
+import ScheduleApp from "@/components/ScheduleApp"
 import {
   Navbar,
   NavBody,
@@ -25,9 +26,18 @@ import {
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [showOnboarding, setShowOnboarding] = useState(false)
+  const [showDemo, setShowDemo] = useState(false)
 
   const handleGetStarted = () => {
     setShowOnboarding(true)
+  }
+
+  const handleDemoClick = () => {
+    setShowDemo(true)
+  }
+
+  const handleDemoBack = () => {
+    setShowDemo(false)
   }
 
   const handleOnboardingComplete = () => {
@@ -43,8 +53,17 @@ function App() {
   const navItems = [
     { name: "Features", link: "#features" },
     { name: "How It Works", link: "#how-it-works" },
-    { name: "Demo", link: "https://github.com/sebastiantheprogammer/schoolscheduleapp" },
+    { name: "Demo", link: "demo" },
   ]
+
+  // Show demo if active
+  if (showDemo) {
+    return (
+      <ScheduleApp 
+        onBack={handleDemoBack}
+      />
+    )
+  }
 
   // Show onboarding flow if active
   if (showOnboarding) {
@@ -65,7 +84,7 @@ function App() {
         {/* Desktop Navigation */}
         <NavBody>
           <NavbarLogo />
-          <NavItems items={navItems} />
+          <NavItems items={navItems} onDemoClick={handleDemoClick} />
           <div className="flex items-center gap-4">
             <NavbarButton variant="secondary" onClick={handleGetStarted}>Login</NavbarButton>
             <NavbarButton variant="primary" onClick={handleGetStarted}>Get Started</NavbarButton>
@@ -87,14 +106,27 @@ function App() {
             onClose={() => setIsMobileMenuOpen(false)}
           >
             {navItems.map((item, idx) => (
-              <a
-                key={`mobile-link-${idx}`}
-                href={item.link}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="relative text-neutral-300 hover:text-white transition-colors"
-              >
-                <span className="block">{item.name}</span>
-              </a>
+              item.link === "demo" ? (
+                <button
+                  key={`mobile-link-${idx}`}
+                  onClick={() => {
+                    setIsMobileMenuOpen(false)
+                    handleDemoClick()
+                  }}
+                  className="relative text-neutral-300 hover:text-white transition-colors cursor-pointer"
+                >
+                  <span className="block">{item.name}</span>
+                </button>
+              ) : (
+                <a
+                  key={`mobile-link-${idx}`}
+                  href={item.link}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="relative text-neutral-300 hover:text-white transition-colors"
+                >
+                  <span className="block">{item.name}</span>
+                </a>
+              )
             ))}
             <div className="flex w-full flex-col gap-4">
               <NavbarButton

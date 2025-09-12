@@ -28,6 +28,7 @@ interface NavItemsProps {
   }[];
   className?: string;
   onItemClick?: () => void;
+  onDemoClick?: () => void;
 }
 
 interface MobileNavProps {
@@ -112,7 +113,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
   );
 };
 
-export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
+export const NavItems = ({ items, className, onItemClick, onDemoClick }: NavItemsProps) => {
   return (
     <motion.div
       className={cn(
@@ -121,14 +122,24 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
       )}
     >
       {items.map((item, idx) => (
-        <a
-          onClick={onItemClick}
-          className="relative px-4 py-2 text-white"
-          key={`link-${idx}`}
-          href={item.link}
-        >
-          <span className="relative z-20">{item.name}</span>
-        </a>
+        item.link === "demo" ? (
+          <button
+            onClick={onDemoClick}
+            className="relative px-4 py-2 text-white cursor-pointer"
+            key={`link-${idx}`}
+          >
+            <span className="relative z-20">{item.name}</span>
+          </button>
+        ) : (
+          <a
+            onClick={onItemClick}
+            className="relative px-4 py-2 text-white"
+            key={`link-${idx}`}
+            href={item.link}
+          >
+            <span className="relative z-20">{item.name}</span>
+          </a>
+        )
       ))}
     </motion.div>
   );
