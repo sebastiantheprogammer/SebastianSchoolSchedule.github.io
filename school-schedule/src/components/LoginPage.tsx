@@ -15,9 +15,11 @@ interface LoginPageProps {
 export function LoginPage({ onLogin, onBack }: LoginPageProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [accessCode, setAccessCode] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [loginMethod, setLoginMethod] = useState<'email' | 'code'>('email')
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     
@@ -26,6 +28,17 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
       setIsLoading(false)
       onLogin()
     }, 2000)
+  }
+
+  const handleCodeLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    
+    // Simulate access code validation
+    setTimeout(() => {
+      setIsLoading(false)
+      onLogin()
+    }, 1500)
   }
 
   return (
@@ -84,49 +97,108 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
             </motion.p>
           </div>
 
+          {/* Login Method Toggle */}
+          <div className="flex bg-white/5 rounded-lg p-1 mb-6">
+            <button
+              onClick={() => setLoginMethod('email')}
+              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+                loginMethod === 'email'
+                  ? 'bg-white text-black'
+                  : 'text-white/70 hover:text-white'
+              }`}
+            >
+              Email & Password
+            </button>
+            <button
+              onClick={() => setLoginMethod('code')}
+              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+                loginMethod === 'code'
+                  ? 'bg-white text-black'
+                  : 'text-white/70 hover:text-white'
+              }`}
+            >
+              Access Code
+            </button>
+          </div>
+
           {/* Login Form */}
           <Card className="bg-white/5 border-white/10">
             <CardHeader>
-              <CardTitle className="text-white text-center">Demo Login</CardTitle>
+              <CardTitle className="text-white text-center">
+                {loginMethod === 'email' ? 'Sign In' : 'Access Your Schedule'}
+              </CardTitle>
               <CardDescription className="text-white/70 text-center">
-                This is a demo - use any email and password
+                {loginMethod === 'email' 
+                  ? 'Use your email and password to sign in'
+                  : 'Enter your unique access code to view your schedule'
+                }
               </CardDescription>
             </CardHeader>
-            <form onSubmit={handleLogin} className="p-6 space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-white">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="student@school.edu"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                  required
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-white">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                  required
-                />
-              </div>
+            
+            {loginMethod === 'email' ? (
+              <form onSubmit={handleEmailLogin} className="p-6 space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-white">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="student@school.edu"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                    required
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-white">Password</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                    required
+                  />
+                </div>
 
-              <Button
-                type="submit"
-                className="w-full bg-white text-black hover:bg-white/90"
-                disabled={isLoading}
-              >
-                {isLoading ? "Signing in..." : "Sign In"}
-              </Button>
-            </form>
+                <Button
+                  type="submit"
+                  className="w-full bg-white text-black hover:bg-white/90"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Signing in..." : "Sign In"}
+                </Button>
+              </form>
+            ) : (
+              <form onSubmit={handleCodeLogin} className="p-6 space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="accessCode" className="text-white">Access Code</Label>
+                  <Input
+                    id="accessCode"
+                    type="text"
+                    placeholder="Enter your 8-digit access code"
+                    value={accessCode}
+                    onChange={(e) => setAccessCode(e.target.value)}
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50 text-center text-lg tracking-widest"
+                    maxLength={8}
+                    required
+                  />
+                  <p className="text-white/50 text-xs text-center">
+                    Your access code was provided when you created your schedule
+                  </p>
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full bg-white text-black hover:bg-white/90"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Accessing..." : "Access Schedule"}
+                </Button>
+              </form>
+            )}
           </Card>
 
           {/* Demo Credentials */}
@@ -137,9 +209,18 @@ export function LoginPage({ onLogin, onBack }: LoginPageProps) {
             className="mt-6 text-center"
           >
             <p className="text-white/50 text-sm">
-              Demo credentials: <br />
-              Email: demo@schedule.com <br />
-              Password: demo123
+              {loginMethod === 'email' ? (
+                <>
+                  Demo credentials: <br />
+                  Email: demo@schedule.com <br />
+                  Password: demo123
+                </>
+              ) : (
+                <>
+                  Demo access code: <br />
+                  <span className="font-mono text-white/70">ABC12345</span>
+                </>
+              )}
             </p>
           </motion.div>
         </motion.div>

@@ -16,8 +16,6 @@ interface ClassPeriod {
   subject: string
   teacher: string
   room: string
-  isCurrent: boolean
-  isNext: boolean
 }
 
 const ScheduleDemo: React.FC<ScheduleDemoProps> = ({ onBack, onComplete }) => {
@@ -28,69 +26,69 @@ const ScheduleDemo: React.FC<ScheduleDemoProps> = ({ onBack, onComplete }) => {
   const getCurrentDaySchedule = (day: string): ClassPeriod[] => {
     const daySchedules = {
       'Monday': [
-        { id: '1', time: '07:50 AM - 08:00 AM', subject: 'Homeroom', teacher: 'Florez, Karla', room: '302', isCurrent: false, isNext: false },
-        { id: '2', time: '08:03 AM - 08:43 AM', subject: 'British Lit ELA 10 Advanced', teacher: 'Camarda, Antoinette', room: '202', isCurrent: false, isNext: false },
-        { id: '3', time: '08:45 AM - 09:25 AM', subject: 'Algebra II 10 Advanced', teacher: 'Rubin De Celis, Miguel', room: '304', isCurrent: true, isNext: false },
-        { id: '4', time: '09:27 AM - 10:07 AM', subject: 'Chemistry 10 Advanced', teacher: 'Reyes, Jeremy', room: '301', isCurrent: false, isNext: true },
-        { id: '5', time: '10:09 AM - 10:55 AM', subject: 'Global Studies II: The Modern Era Advanced', teacher: 'Follenius, David', room: '204', isCurrent: false, isNext: false },
-        { id: '6', time: '10:57 AM - 11:31 AM', subject: 'Mass', teacher: 'Chapel', room: 'Chapel', isCurrent: false, isNext: false },
-        { id: '7', time: '11:33 AM - 12:13 PM', subject: 'Phys Ed 10 Advanced', teacher: 'Tucker III, Menzo', room: 'Gym', isCurrent: false, isNext: false },
-        { id: '8', time: '12:13 PM - 12:42 PM', subject: 'Lunch - Sophomore & Junior', teacher: 'Cafeteria', room: 'Cafeteria', isCurrent: false, isNext: false },
-        { id: '9', time: '12:42 PM - 01:22 PM', subject: 'Spanish 10 Intermediate Advanced', teacher: 'Florez, Karla', room: '201', isCurrent: false, isNext: false },
-        { id: '10', time: '01:24 PM - 02:04 PM', subject: 'Computer Science 10 Advanced', teacher: 'Rooney, Robert', room: '203', isCurrent: false, isNext: false },
-        { id: '11', time: '02:06 PM - 02:46 PM', subject: 'Computer Science 10 Advanced', teacher: 'Rooney, Robert', room: '203', isCurrent: false, isNext: false }
+        { id: '1', time: '07:50 AM - 08:00 AM', subject: 'Homeroom', teacher: 'Florez, Karla', room: '302' },
+        { id: '2', time: '08:03 AM - 08:43 AM', subject: 'British Lit ELA 10 Advanced', teacher: 'Camarda, Antoinette', room: '202' },
+        { id: '3', time: '08:45 AM - 09:25 AM', subject: 'Algebra II 10 Advanced', teacher: 'Rubin De Celis, Miguel', room: '304' },
+        { id: '4', time: '09:27 AM - 10:07 AM', subject: 'Chemistry 10 Advanced', teacher: 'Reyes, Jeremy', room: '301' },
+        { id: '5', time: '10:09 AM - 10:55 AM', subject: 'Global Studies II: The Modern Era Advanced', teacher: 'Follenius, David', room: '204' },
+        { id: '6', time: '10:57 AM - 11:31 AM', subject: 'Mass', teacher: 'Chapel', room: 'Chapel' },
+        { id: '7', time: '11:33 AM - 12:13 PM', subject: 'Phys Ed 10 Advanced', teacher: 'Tucker III, Menzo', room: 'Gym' },
+        { id: '8', time: '12:13 PM - 12:42 PM', subject: 'Lunch - Sophomore & Junior', teacher: 'Cafeteria', room: 'Cafeteria' },
+        { id: '9', time: '12:42 PM - 01:22 PM', subject: 'Spanish 10 Intermediate Advanced', teacher: 'Florez, Karla', room: '201' },
+        { id: '10', time: '01:24 PM - 02:04 PM', subject: 'Computer Science 10 Advanced', teacher: 'Rooney, Robert', room: '203' },
+        { id: '11', time: '02:06 PM - 02:46 PM', subject: 'Computer Science 10 Advanced', teacher: 'Rooney, Robert', room: '203' }
       ],
       'Tuesday': [
-        { id: '1', time: '07:50 AM - 08:00 AM', subject: 'Homeroom', teacher: 'Florez, Karla', room: '302', isCurrent: false, isNext: false },
-        { id: '2', time: '08:03 AM - 08:43 AM', subject: 'Mass', teacher: 'Chapel', room: 'Chapel', isCurrent: false, isNext: false },
-        { id: '3', time: '08:45 AM - 09:25 AM', subject: 'Intro to Sacred Script 10 Advanced', teacher: 'Neier, Steven', room: '305', isCurrent: true, isNext: false },
-        { id: '4', time: '09:27 AM - 10:07 AM', subject: 'Intro to Sacred Script 10 Advanced', teacher: 'Neier, Steven', room: '305', isCurrent: false, isNext: true },
-        { id: '5', time: '10:09 AM - 10:55 AM', subject: 'Algebra II 10 Advanced', teacher: 'Rubin De Celis, Miguel', room: '304', isCurrent: false, isNext: false },
-        { id: '6', time: '10:57 AM - 11:31 AM', subject: 'Spanish 10 Intermediate Advanced', teacher: 'Florez, Karla', room: '201', isCurrent: false, isNext: false },
-        { id: '7', time: '11:33 AM - 12:13 PM', subject: 'Chemistry 10 Advanced', teacher: 'Reyes, Jeremy', room: '301', isCurrent: false, isNext: false },
-        { id: '8', time: '12:13 PM - 12:42 PM', subject: 'Lunch - Sophomore & Junior', teacher: 'Cafeteria', room: 'Cafeteria', isCurrent: false, isNext: false },
-        { id: '9', time: '12:42 PM - 01:22 PM', subject: 'British Lit ELA 10 Advanced', teacher: 'Camarda, Antoinette', room: '202', isCurrent: false, isNext: false },
-        { id: '10', time: '01:24 PM - 02:04 PM', subject: 'Spanish 10 Intermediate Advanced', teacher: 'Florez, Karla', room: '201', isCurrent: false, isNext: false },
-        { id: '11', time: '02:06 PM - 02:46 PM', subject: 'Global Studies II: The Modern Era Advanced', teacher: 'Follenius, David', room: '204', isCurrent: false, isNext: false }
+        { id: '1', time: '07:50 AM - 08:00 AM', subject: 'Homeroom', teacher: 'Florez, Karla', room: '302' },
+        { id: '2', time: '08:03 AM - 08:43 AM', subject: 'Mass', teacher: 'Chapel', room: 'Chapel' },
+        { id: '3', time: '08:45 AM - 09:25 AM', subject: 'Intro to Sacred Script 10 Advanced', teacher: 'Neier, Steven', room: '305' },
+        { id: '4', time: '09:27 AM - 10:07 AM', subject: 'Intro to Sacred Script 10 Advanced', teacher: 'Neier, Steven', room: '305' },
+        { id: '5', time: '10:09 AM - 10:55 AM', subject: 'Algebra II 10 Advanced', teacher: 'Rubin De Celis, Miguel', room: '304' },
+        { id: '6', time: '10:57 AM - 11:31 AM', subject: 'Spanish 10 Intermediate Advanced', teacher: 'Florez, Karla', room: '201' },
+        { id: '7', time: '11:33 AM - 12:13 PM', subject: 'Chemistry 10 Advanced', teacher: 'Reyes, Jeremy', room: '301' },
+        { id: '8', time: '12:13 PM - 12:42 PM', subject: 'Lunch - Sophomore & Junior', teacher: 'Cafeteria', room: 'Cafeteria' },
+        { id: '9', time: '12:42 PM - 01:22 PM', subject: 'British Lit ELA 10 Advanced', teacher: 'Camarda, Antoinette', room: '202' },
+        { id: '10', time: '01:24 PM - 02:04 PM', subject: 'Spanish 10 Intermediate Advanced', teacher: 'Florez, Karla', room: '201' },
+        { id: '11', time: '02:06 PM - 02:46 PM', subject: 'Global Studies II: The Modern Era Advanced', teacher: 'Follenius, David', room: '204' }
       ],
       'Wednesday': [
-        { id: '1', time: '07:50 AM - 08:00 AM', subject: 'Homeroom', teacher: 'Florez, Karla', room: '302', isCurrent: false, isNext: false },
-        { id: '2', time: '08:03 AM - 08:43 AM', subject: 'Intro to Sacred Script 10 Advanced', teacher: 'Neier, Steven', room: '305', isCurrent: false, isNext: false },
-        { id: '3', time: '08:45 AM - 09:25 AM', subject: 'Intro to Sacred Script 10 Advanced', teacher: 'Neier, Steven', room: '305', isCurrent: true, isNext: false },
-        { id: '4', time: '09:27 AM - 10:07 AM', subject: 'Chemistry 10 Advanced', teacher: 'Reyes, Jeremy', room: '301', isCurrent: false, isNext: true },
-        { id: '5', time: '10:09 AM - 10:55 AM', subject: 'Chemistry 10 Advanced', teacher: 'Reyes, Jeremy', room: '301', isCurrent: false, isNext: false },
-        { id: '6', time: '10:57 AM - 11:31 AM', subject: 'Mass', teacher: 'Chapel', room: 'Chapel', isCurrent: false, isNext: false },
-        { id: '7', time: '11:33 AM - 12:13 PM', subject: 'Global Studies II: The Modern Era Advanced', teacher: 'Follenius, David', room: '204', isCurrent: false, isNext: false },
-        { id: '8', time: '12:13 PM - 12:42 PM', subject: 'Lunch - Sophomore & Junior', teacher: 'Cafeteria', room: 'Cafeteria', isCurrent: false, isNext: false },
-        { id: '9', time: '12:42 PM - 01:22 PM', subject: 'Algebra II 10 Advanced', teacher: 'Rubin De Celis, Miguel', room: '304', isCurrent: false, isNext: false },
-        { id: '10', time: '01:24 PM - 02:04 PM', subject: 'British Lit ELA 10 Advanced', teacher: 'Camarda, Antoinette', room: '202', isCurrent: false, isNext: false },
-        { id: '11', time: '02:06 PM - 02:46 PM', subject: 'Early Dismissal - Professional Development', teacher: 'N/A', room: 'N/A', isCurrent: false, isNext: false }
+        { id: '1', time: '07:50 AM - 08:00 AM', subject: 'Homeroom', teacher: 'Florez, Karla', room: '302' },
+        { id: '2', time: '08:03 AM - 08:43 AM', subject: 'Intro to Sacred Script 10 Advanced', teacher: 'Neier, Steven', room: '305' },
+        { id: '3', time: '08:45 AM - 09:25 AM', subject: 'Intro to Sacred Script 10 Advanced', teacher: 'Neier, Steven', room: '305' },
+        { id: '4', time: '09:27 AM - 10:07 AM', subject: 'Chemistry 10 Advanced', teacher: 'Reyes, Jeremy', room: '301' },
+        { id: '5', time: '10:09 AM - 10:55 AM', subject: 'Chemistry 10 Advanced', teacher: 'Reyes, Jeremy', room: '301' },
+        { id: '6', time: '10:57 AM - 11:31 AM', subject: 'Mass', teacher: 'Chapel', room: 'Chapel' },
+        { id: '7', time: '11:33 AM - 12:13 PM', subject: 'Global Studies II: The Modern Era Advanced', teacher: 'Follenius, David', room: '204' },
+        { id: '8', time: '12:13 PM - 12:42 PM', subject: 'Lunch - Sophomore & Junior', teacher: 'Cafeteria', room: 'Cafeteria' },
+        { id: '9', time: '12:42 PM - 01:22 PM', subject: 'Algebra II 10 Advanced', teacher: 'Rubin De Celis, Miguel', room: '304' },
+        { id: '10', time: '01:24 PM - 02:04 PM', subject: 'British Lit ELA 10 Advanced', teacher: 'Camarda, Antoinette', room: '202' },
+        { id: '11', time: '02:06 PM - 02:46 PM', subject: 'Early Dismissal - Professional Development', teacher: 'N/A', room: 'N/A' }
       ],
       'Thursday': [
-        { id: '1', time: '07:50 AM - 08:00 AM', subject: 'Homeroom', teacher: 'Florez, Karla', room: '302', isCurrent: false, isNext: false },
-        { id: '2', time: '08:03 AM - 08:43 AM', subject: 'Mass', teacher: 'Chapel', room: 'Chapel', isCurrent: false, isNext: false },
-        { id: '3', time: '08:45 AM - 09:25 AM', subject: 'Phys Ed 10 Advanced', teacher: 'Tucker III, Menzo', room: 'Gym', isCurrent: true, isNext: false },
-        { id: '4', time: '09:27 AM - 10:07 AM', subject: 'Global Studies II: The Modern Era Advanced', teacher: 'Follenius, David', room: '204', isCurrent: false, isNext: true },
-        { id: '5', time: '10:09 AM - 10:55 AM', subject: 'British Lit ELA 10 Advanced', teacher: 'Camarda, Antoinette', room: '202', isCurrent: false, isNext: false },
-        { id: '6', time: '10:57 AM - 11:31 AM', subject: 'Spanish 10 Intermediate Advanced', teacher: 'Florez, Karla', room: '201', isCurrent: false, isNext: false },
-        { id: '7', time: '11:33 AM - 12:13 PM', subject: 'Chemistry 10 Advanced', teacher: 'Reyes, Jeremy', room: '301', isCurrent: false, isNext: false },
-        { id: '8', time: '12:13 PM - 12:42 PM', subject: 'Lunch - Sophomore & Junior', teacher: 'Cafeteria', room: 'Cafeteria', isCurrent: false, isNext: false },
-        { id: '9', time: '12:42 PM - 01:22 PM', subject: 'Algebra II 10 Advanced', teacher: 'Rubin De Celis, Miguel', room: '304', isCurrent: false, isNext: false },
-        { id: '10', time: '01:24 PM - 02:04 PM', subject: 'Computer Science 10 Advanced', teacher: 'Rooney, Robert', room: '203', isCurrent: false, isNext: false },
-        { id: '11', time: '02:06 PM - 02:46 PM', subject: 'Holy Hour', teacher: 'Chapel', room: 'Chapel', isCurrent: false, isNext: false }
+        { id: '1', time: '07:50 AM - 08:00 AM', subject: 'Homeroom', teacher: 'Florez, Karla', room: '302' },
+        { id: '2', time: '08:03 AM - 08:43 AM', subject: 'Mass', teacher: 'Chapel', room: 'Chapel' },
+        { id: '3', time: '08:45 AM - 09:25 AM', subject: 'Phys Ed 10 Advanced', teacher: 'Tucker III, Menzo', room: 'Gym' },
+        { id: '4', time: '09:27 AM - 10:07 AM', subject: 'Global Studies II: The Modern Era Advanced', teacher: 'Follenius, David', room: '204' },
+        { id: '5', time: '10:09 AM - 10:55 AM', subject: 'British Lit ELA 10 Advanced', teacher: 'Camarda, Antoinette', room: '202' },
+        { id: '6', time: '10:57 AM - 11:31 AM', subject: 'Spanish 10 Intermediate Advanced', teacher: 'Florez, Karla', room: '201' },
+        { id: '7', time: '11:33 AM - 12:13 PM', subject: 'Chemistry 10 Advanced', teacher: 'Reyes, Jeremy', room: '301' },
+        { id: '8', time: '12:13 PM - 12:42 PM', subject: 'Lunch - Sophomore & Junior', teacher: 'Cafeteria', room: 'Cafeteria' },
+        { id: '9', time: '12:42 PM - 01:22 PM', subject: 'Algebra II 10 Advanced', teacher: 'Rubin De Celis, Miguel', room: '304' },
+        { id: '10', time: '01:24 PM - 02:04 PM', subject: 'Computer Science 10 Advanced', teacher: 'Rooney, Robert', room: '203' },
+        { id: '11', time: '02:06 PM - 02:46 PM', subject: 'Holy Hour', teacher: 'Chapel', room: 'Chapel' }
       ],
       'Friday': [
-        { id: '1', time: '07:50 AM - 08:00 AM', subject: 'Homeroom', teacher: 'Florez, Karla', room: '302', isCurrent: false, isNext: false },
-        { id: '2', time: '08:03 AM - 08:43 AM', subject: 'Algebra II 10 Advanced', teacher: 'Rubin De Celis, Miguel', room: '304', isCurrent: false, isNext: false },
-        { id: '3', time: '08:45 AM - 09:25 AM', subject: 'Chemistry 10 Advanced', teacher: 'Reyes, Jeremy', room: '301', isCurrent: true, isNext: false },
-        { id: '4', time: '09:27 AM - 10:07 AM', subject: 'Guidance 10 Advanced', teacher: 'Nieves, Stacy', room: '303', isCurrent: false, isNext: true },
-        { id: '5', time: '10:09 AM - 10:55 AM', subject: 'British Lit ELA 10 Advanced', teacher: 'Camarda, Antoinette', room: '202', isCurrent: false, isNext: false },
-        { id: '6', time: '10:57 AM - 11:31 AM', subject: 'Mass', teacher: 'Chapel', room: 'Chapel', isCurrent: false, isNext: false },
-        { id: '7', time: '11:33 AM - 12:13 PM', subject: 'Phys Ed 10 Advanced', teacher: 'Tucker III, Menzo', room: 'Gym', isCurrent: false, isNext: false },
-        { id: '8', time: '12:13 PM - 12:42 PM', subject: 'Lunch - Sophomore & Junior', teacher: 'Cafeteria', room: 'Cafeteria', isCurrent: false, isNext: false },
-        { id: '9', time: '12:42 PM - 01:22 PM', subject: 'Spanish 10 Intermediate Advanced', teacher: 'Florez, Karla', room: '201', isCurrent: false, isNext: false },
-        { id: '10', time: '01:24 PM - 02:04 PM', subject: 'Global Studies II: The Modern Era Advanced', teacher: 'Follenius, David', room: '204', isCurrent: false, isNext: false },
-        { id: '11', time: '02:06 PM - 02:46 PM', subject: 'Computer Science 10 Advanced', teacher: 'Rooney, Robert', room: '203', isCurrent: false, isNext: false }
+        { id: '1', time: '07:50 AM - 08:00 AM', subject: 'Homeroom', teacher: 'Florez, Karla', room: '302' },
+        { id: '2', time: '08:03 AM - 08:43 AM', subject: 'Algebra II 10 Advanced', teacher: 'Rubin De Celis, Miguel', room: '304' },
+        { id: '3', time: '08:45 AM - 09:25 AM', subject: 'Chemistry 10 Advanced', teacher: 'Reyes, Jeremy', room: '301' },
+        { id: '4', time: '09:27 AM - 10:07 AM', subject: 'Guidance 10 Advanced', teacher: 'Nieves, Stacy', room: '303' },
+        { id: '5', time: '10:09 AM - 10:55 AM', subject: 'British Lit ELA 10 Advanced', teacher: 'Camarda, Antoinette', room: '202' },
+        { id: '6', time: '10:57 AM - 11:31 AM', subject: 'Mass', teacher: 'Chapel', room: 'Chapel' },
+        { id: '7', time: '11:33 AM - 12:13 PM', subject: 'Phys Ed 10 Advanced', teacher: 'Tucker III, Menzo', room: 'Gym' },
+        { id: '8', time: '12:13 PM - 12:42 PM', subject: 'Lunch - Sophomore & Junior', teacher: 'Cafeteria', room: 'Cafeteria' },
+        { id: '9', time: '12:42 PM - 01:22 PM', subject: 'Spanish 10 Intermediate Advanced', teacher: 'Florez, Karla', room: '201' },
+        { id: '10', time: '01:24 PM - 02:04 PM', subject: 'Global Studies II: The Modern Era Advanced', teacher: 'Follenius, David', room: '204' },
+        { id: '11', time: '02:06 PM - 02:46 PM', subject: 'Computer Science 10 Advanced', teacher: 'Rooney, Robert', room: '203' }
       ]
     }
     
@@ -115,8 +113,54 @@ const ScheduleDemo: React.FC<ScheduleDemoProps> = ({ onBack, onComplete }) => {
     })
   }
 
-  const currentClass = schedule.find(period => period.isCurrent)
-  const nextClass = schedule.find(period => period.isNext)
+  // Function to parse time string and convert to minutes since midnight
+  const parseTimeToMinutes = (timeStr: string): number => {
+    const [time, period] = timeStr.split(' ')
+    const [hours, minutes] = time.split(':').map(Number)
+    let totalMinutes = hours * 60 + minutes
+    if (period === 'PM' && hours !== 12) totalMinutes += 12 * 60
+    if (period === 'AM' && hours === 12) totalMinutes -= 12 * 60
+    return totalMinutes
+  }
+
+  // Function to get current time in minutes since midnight
+  const getCurrentTimeInMinutes = (): number => {
+    const now = new Date()
+    return now.getHours() * 60 + now.getMinutes()
+  }
+
+  // Find current and next classes based on actual time
+  const getCurrentAndNextClasses = () => {
+    const currentTimeMinutes = getCurrentTimeInMinutes()
+    let currentClass = null
+    let nextClass = null
+
+    for (let i = 0; i < schedule.length; i++) {
+      const period = schedule[i]
+      const [startTime, endTime] = period.time.split(' - ')
+      const startMinutes = parseTimeToMinutes(startTime)
+      const endMinutes = parseTimeToMinutes(endTime)
+
+      // Check if current time is within this period
+      if (currentTimeMinutes >= startMinutes && currentTimeMinutes <= endMinutes) {
+        currentClass = period
+        // Next class is the one after this
+        if (i + 1 < schedule.length) {
+          nextClass = schedule[i + 1]
+        }
+        break
+      }
+      // If current time is before this period, this is the next class
+      else if (currentTimeMinutes < startMinutes) {
+        nextClass = period
+        break
+      }
+    }
+
+    return { currentClass, nextClass }
+  }
+
+  const { currentClass, nextClass } = getCurrentAndNextClasses()
 
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
@@ -252,47 +296,52 @@ const ScheduleDemo: React.FC<ScheduleDemoProps> = ({ onBack, onComplete }) => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {schedule.map((period, index) => (
-                    <motion.div
-                      key={period.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
-                      className={`p-4 rounded-lg border transition-all ${
-                        period.isCurrent
-                          ? 'bg-green-500/20 border-green-500/30'
-                          : period.isNext
-                          ? 'bg-blue-500/20 border-blue-500/30'
-                          : 'bg-white/5 border-white/10'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <h4 className={`font-semibold ${
-                            period.isCurrent ? 'text-green-400' : 
-                            period.isNext ? 'text-blue-400' : 'text-white'
-                          }`}>
-                            {period.subject}
-                          </h4>
-                          <p className="text-white/60 text-sm">{period.teacher}</p>
-                          <div className="flex items-center gap-4 mt-1">
-                            <span className="text-white/50 text-xs">{period.room}</span>
-                            <span className="text-white/50 text-xs">{period.time}</span>
+                  {schedule.map((period, index) => {
+                    const isCurrentPeriod = currentClass && currentClass.id === period.id
+                    const isNextPeriod = nextClass && nextClass.id === period.id
+                    
+                    return (
+                      <motion.div
+                        key={period.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
+                        className={`p-4 rounded-lg border transition-all ${
+                          isCurrentPeriod
+                            ? 'bg-green-500/20 border-green-500/30'
+                            : isNextPeriod
+                            ? 'bg-blue-500/20 border-blue-500/30'
+                            : 'bg-white/5 border-white/10'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <h4 className={`font-semibold ${
+                              isCurrentPeriod ? 'text-green-400' : 
+                              isNextPeriod ? 'text-blue-400' : 'text-white'
+                            }`}>
+                              {period.subject}
+                            </h4>
+                            <p className="text-white/60 text-sm">{period.teacher}</p>
+                            <div className="flex items-center gap-4 mt-1">
+                              <span className="text-white/50 text-xs">{period.room}</span>
+                              <span className="text-white/50 text-xs">{period.time}</span>
+                            </div>
                           </div>
+                          {isCurrentPeriod && (
+                            <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                              Now
+                            </Badge>
+                          )}
+                          {isNextPeriod && (
+                            <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
+                              Next
+                            </Badge>
+                          )}
                         </div>
-                        {period.isCurrent && (
-                          <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-                            Now
-                          </Badge>
-                        )}
-                        {period.isNext && (
-                          <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
-                            Next
-                          </Badge>
-                        )}
-                      </div>
-                    </motion.div>
-                  ))}
+                      </motion.div>
+                    )
+                  })}
                 </div>
               </CardContent>
             </Card>
